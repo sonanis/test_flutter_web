@@ -1,0 +1,8 @@
+{
+    "genDartText": "Generate Dart",
+    "formatBtnText":"Format",
+    "cleanBtnTest":"Clean",
+    "inputJsonAreaHint":"Input a json string here",
+    "copyBtnText":"Copy",
+    "inputClassNameHint": "Input Class Name"
+}

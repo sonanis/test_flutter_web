@@ -1,0 +1,8 @@
+{
+    "genDartText": "生成Dart",
+    "formatBtnText":"格式化",
+    "cleanBtnTest":"清空",
+    "inputJsonAreaHint":"请在此输入Json字符串",
+    "copyBtnText":"复制",
+    "inputClassNameHint": "请输入类名"
+}

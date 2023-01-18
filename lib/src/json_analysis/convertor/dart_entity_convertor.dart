@@ -4,7 +4,7 @@ import 'package:test_flutter_web/src/json_analysis/json_analysis.dart';
 
 class DartEntityConvertor extends JsonObjectConvertor{
 
-  DartEntityConvertor({ConverConfig? config}):super(config: config);
+  DartEntityConvertor({ConverConfig? config}) : super(config: config);
 
   String _fieldObjText(JsonElement field, int indentLevel){
     StringBuffer buffer = StringBuffer();
@@ -134,6 +134,22 @@ class DartEntityConvertor extends JsonObjectConvertor{
     return result.toString();
   }
 
+  String? clsConstructorText(JsonElement element){
+    if( !(element.children?.isEmpty ?? true) ){
+      /// class里有属性时才生成构造函数
+      int indentLevel = 1;
+      String clsName = toBeginningOfSentenceCase(element.name) ?? element.name;
+      StringBuffer result = StringBuffer();
+      writelnWithIndentation(result, indentLevel, '$clsName ({');
+      for(final field in element.children!){
+        writelnWithIndentation(result, indentLevel+1, 'this.${field.name},');
+      }
+      writelnWithIndentation(result, indentLevel, '});');
+      return result.toString();
+    }
+    return null;
+  }
+
   @override
   String entityText(JsonElement element) {
     bool nullSafety = config?.nullSafety ?? true;
@@ -164,8 +180,12 @@ class DartEntityConvertor extends JsonObjectConvertor{
           result.write('${temp.join('')}\n');
         }
       }
+      String? constructorText = clsConstructorText(element);
       String fromJsonText = objectFromJsonText(element);
       String toJsonText = objectToJsonMapText(element);
+      if( !(constructorText?.isEmpty ?? true) ){
+        result.write('\n$constructorText\n');
+      }
       result.write('\n$fromJsonText\n');
       result.write('\n$toJsonText\n');
       result.write('}');

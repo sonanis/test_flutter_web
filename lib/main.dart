@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:test_flutter_web/src/json_analysis/convertor/json_entity_conver.dart';
 import 'package:test_flutter_web/src/res/diments.dart';
@@ -20,10 +21,14 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => JsonEntityConverVM()),
       ],
       child: MaterialApp(
+        // locale: const Locale('en'),
+        locale: const Locale('zh'),
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: const MyHomePage(title: 'Flutter Demo Home Page'),
       ),
     );
@@ -42,6 +47,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   final TextEditingController _editingController = TextEditingController();
+  final TextEditingController _clsEditingController = TextEditingController();
 
   @override
   void initState() {
@@ -72,6 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           height: Diments.mainHeight,
                           child: JsonInputArea(
                             edit: _editingController,
+                            clsNameEdit: _clsEditingController,
                             onChange: (text){
                               context.read<JsonEntityConverVM>()
                                   .changeInputText(text);
@@ -79,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           )),
                     ),
 
-                    SizedBox(width: 20,),
+                    const SizedBox(width: 20,),
 
                     Expanded(
                         child: Container(

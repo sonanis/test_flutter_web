@@ -1,13 +1,22 @@
 import 'dart:convert';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:test_flutter_web/src/json_analysis/convertor/json_entity_conver.dart';
 import 'package:test_flutter_web/src/res/diments.dart';
 import 'package:test_flutter_web/src/utils/decoration_utils.dart';
 import 'package:test_flutter_web/src/widgets/card_container.dart';
 
 class JsonInputArea extends StatefulWidget {
-  const JsonInputArea({Key? key, required this.edit, this.onChange,}) : super(key: key);
+  const JsonInputArea({
+    Key? key,
+    required this.edit,
+    required this.clsNameEdit,
+    this.onChange,
+  }) : super(key: key);
   final TextEditingController edit;
+  final TextEditingController clsNameEdit;
   final ValueChanged<String>? onChange;
   @override
   State<JsonInputArea> createState() => _JsonInputAreaState();
@@ -16,6 +25,7 @@ class JsonInputArea extends StatefulWidget {
 class _JsonInputAreaState extends State<JsonInputArea> {
 
   TextEditingController get edit => widget.edit;
+  TextEditingController get clsEdit => widget.clsNameEdit;
   final FocusNode _jsonEditFocus = FocusNode();
 
   @override
@@ -36,11 +46,11 @@ class _JsonInputAreaState extends State<JsonInputArea> {
   Widget _buildInputLayout(){
     return Column(
       children: [
-        Container(
+        SizedBox(
             height: Diments.tileHeight,
             child: _buildTopButtons()),
         Expanded(child: _buildInputArea()),
-        Container(
+        SizedBox(
             height: Diments.tileHeight,
             child: _buildBottomButtons()),
       ],
@@ -59,8 +69,8 @@ class _JsonInputAreaState extends State<JsonInputArea> {
           focusNode: _jsonEditFocus,
           controller: edit,
           maxLines: 999,
-          decoration: const InputDecoration(
-            hintText: '请在此输入Json字符串',
+          decoration: InputDecoration(
+            hintText: AppLocalizations.of(context)!.inputJsonAreaHint,
           ),
           onChanged: widget.onChange,
         ),
@@ -78,10 +88,10 @@ class _JsonInputAreaState extends State<JsonInputArea> {
           } catch (e) {
             print(e);
           }
-        }, child: Text('格式化')),
+        }, child: Text(AppLocalizations.of(context)!.formatBtnText)),
         TextButton(onPressed: (){
           edit.text = '';
-        }, child: Text('清空')),
+        }, child: Text(AppLocalizations.of(context)!.cleanBtnTest)),
       ],
     );
   }
@@ -89,9 +99,17 @@ class _JsonInputAreaState extends State<JsonInputArea> {
   Widget _buildBottomButtons(){
     return Row(
       children: [
+        Expanded(child: TextField(
+          controller: clsEdit,
+          maxLines: 1,
+          decoration: InputDecoration(
+            hintText: AppLocalizations.of(context)!.inputClassNameHint,
+          ),
+        )),
         TextButton(onPressed: (){
-
-        }, child: Text('生成Dart')),
+          context.read<JsonEntityConverVM>()
+              .changeInputText(edit.text, clsName: clsEdit.text);
+        }, child: Text(AppLocalizations.of(context)!.genDartText)),
       ],
     );
   }

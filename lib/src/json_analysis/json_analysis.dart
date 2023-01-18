@@ -30,6 +30,8 @@ class JsonAnalysis{
       element.fieldType = 'double';
     }else if(jsonContent is num){
       element.fieldType = 'num';
+    }else if(jsonContent is bool){
+      element.fieldType = 'bool';
     }else if(jsonContent is List){
       element.fieldType = 'List';
       if(element is JsonArrayElement){

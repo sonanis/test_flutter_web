@@ -6,6 +6,7 @@ import 'package:test_flutter_web/src/json_analysis/json_analysis.dart';
 class JsonEntityConverVM extends ChangeNotifier{
   String _resultText = '';
   String _originalText = '';
+  String? _clsName;
   ConverConfig _converConfig = ConverConfig();
 
 
@@ -22,17 +23,25 @@ class JsonEntityConverVM extends ChangeNotifier{
     changeInputText(_originalText);
   }
 
-  void changeInputText(String text){
+  void changeClsName(String? text){
+    if(text != _clsName){
+      _clsName = text;
+      changeInputText(_originalText);
+    }
+  }
+
+  void changeInputText(String text,{String? clsName}){
     _originalText = text;
+    _clsName = clsName;
     try {
       if(text.isEmpty){
         _resultText = '';
         notifyListeners();
         return ;
       }
-      JsonAnalysis analysis = JsonAnalysis.parse(text);
+      JsonAnalysis analysis = JsonAnalysis.parse(text, rootName: _clsName);
 
-      JsonObjectConvertor convertor = DartEntityConvertor(config: _converConfig);
+      JsonObjectConvertor convertor = DartEntityConvertor();
       StringBuffer result = StringBuffer();
       List<JsonElement> objects = analysis.object;
       for(final obj in objects){

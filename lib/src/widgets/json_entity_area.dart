@@ -1,3 +1,4 @@
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:test_flutter_web/src/json_analysis/convertor/json_convertor.dart';
@@ -82,7 +83,7 @@ class _JsonEntityAreaState extends State<JsonEntityArea> {
     return TextButton(onPressed: (){
       Clipboard.setData(ClipboardData(
           text: context.read<JsonEntityConverVM>().resultText));
-    }, child: Text('复制'));
+    }, child: Text(AppLocalizations.of(context)!.copyBtnText));
   }
 
 }
